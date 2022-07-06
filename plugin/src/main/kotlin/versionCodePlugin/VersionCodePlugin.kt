@@ -41,14 +41,16 @@ class VersionCodePlugin : Plugin<Project> {
         with(target) {
             extensions.configure<BaseAppModuleExtension> {
                 val host = property("versionCodePlugin.host") as String
+                println(host)
                 val packageName = property("versionCodePlugin.packageName") as String
-                var versionCode = getVersionCodeFromRemote(packageName, host)!!
+                println(packageName)
+                var versionCode = getVersionCodeFromRemote(packageName, host)
                 project.gradle.taskGraph.whenReady {
                     if (project.gradle.taskGraph.allTasks.toString()
                             .contains("release") || project.gradle.taskGraph.allTasks.toString().contains("dogfood")
                     ) {
                         setRemoteVersionCode(packageName, versionCode + 2, host)
-                        versionCode = getVersionCodeFromRemote(packageName, host)!!
+                        versionCode = getVersionCodeFromRemote(packageName, host)
                     }
                 }
             }
