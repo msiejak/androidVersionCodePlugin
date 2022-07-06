@@ -46,13 +46,12 @@ class VersionCodePlugin : Plugin<Project> {
                 println(packageName)
                 var versionCode = getVersionCodeFromRemote(packageName, host)
                 project.gradle.taskGraph.whenReady {
-                    if (project.gradle.taskGraph.allTasks.toString()
-                            .contains("release") || project.gradle.taskGraph.allTasks.toString().contains("dogfood")
-                    ) {
+                    if (project.gradle.taskGraph.hasTask(":app:minifyReleaseWithR8") || project.gradle.taskGraph.hasTask(":app:minifyDogfoodWithR8")) {
                         setRemoteVersionCode(packageName, versionCode + 2, host)
                         versionCode = getVersionCodeFromRemote(packageName, host)
                     }
                 }
+                defaultConfig.versionCode = versionCode
             }
         }
     }
